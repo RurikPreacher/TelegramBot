@@ -3,9 +3,9 @@ import sqlite3
 
 class SQLighter:
 
-    def __init__(self, database_file):
+    def __init__(self, database):
         """Подключаемся к БД и сохраняем курсор соединения"""
-        self.connection = sqlite3.connect(database_file)
+        self.connection = sqlite3.connect(database)
         self.cursor = self.connection.cursor()
 
     def get_subscriptions(self, status=True):
@@ -31,11 +31,12 @@ class SQLighter:
             )
 
     def update_subscrition(self, user_id, status):
-        """Обновляем статус подписки"""
-        return self.cursor.execute(
-            "UPDATE `subscriptions` SET `status` = ? WHERE `user_id` = ?",
-            (status, user_id)
-        )
+        """Обновляем статус подписки пользователя"""
+        with self.connection:
+            return self.cursor.execute(
+                "UPDATE `subscriptions` SET `status` = ? WHERE `user_id` = ?",
+                (status, user_id)
+            )
 
     def close(self):
         """Закрываем соединение с БД"""
