@@ -1,11 +1,21 @@
-import telebot
 import config
+import logging
 
-bot = telebot.TeleBot(config.TOKEN)
+from aiogram import Bot, Dispatcher, executor, types
 
-@bot.message_handler(content_types=['text'])
-def lalala(message):
-    bot.send_message(message.chat.id, message.text)
+# задаем уровень логов
+logging.basicConfig(level=logging.INFO)
 
-# RUN
-bot.polling(none_stop=True)
+# инициализировать бота
+bot = Bot(token=config.API_TOKEN)
+dp = Dispatcher(bot)
+
+
+# Эхо
+@dp.message_handler()
+async def echo(message: types.Message):
+    await message.answer(message.text)
+
+# запускаем лонг поллинг
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
