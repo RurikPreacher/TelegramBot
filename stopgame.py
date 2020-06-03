@@ -1,7 +1,7 @@
 import re
 import os.path
 import requests
-from bs4 import BeautifulSoup as bs4
+from bs4 import BeautifulSoup as BS
 from urllib.parse import urlparse
 
 
