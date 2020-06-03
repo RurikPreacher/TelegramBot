@@ -1,5 +1,7 @@
 import config
 import logging
+import asyncio
+from datetime import datetime
 
 from aiogram import Bot, Dispatcher, executor, types
 from sqlighter import SQLighter
@@ -40,6 +42,15 @@ async def unsubscribe(message: types.Message):
         db.update_subscrition(message.from_user.id, False)
         await message.answer("Вы успешно отписаны от рассылки.")
 
+# тест таймера
+async def scheduled(wait_for):
+    while True:
+        await asyncio.sleep(wait_for)
+
+        now = datetime.utcnow()
+        await bot.send_message(408312658, f"{now}", disable_notification=True)
+
 # запускаем лонг поллинг
 if __name__ == '__main__':
+    dp.loop.create_task(scheduled(10))
     executor.start_polling(dp, skip_updates=True)
